@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -17,18 +15,36 @@ class _HomeState extends State<Home> {
 
   Widget button(String text) {
     return Expanded(
-      child: ElevatedButton(
-        onPressed: () {
-          buttonpress(text);
-        },
-        child: Text(text),style: ElevatedButton.styleFrom(backgroundColor: text=="/"||text=="x"||text=="-"||text=="+" ?  Colors.amber:(text=="=")?,
+      child: SizedBox(
+        width: 75,
+        height: 75,
+
+        child: ElevatedButton(
+          onPressed: () {
+            buttonpress(text);
+          },
+          child: Text(text,style: TextStyle(fontSize: Text=="AC"?18:30)),
+          style: ElevatedButton.styleFrom(
+            backgroundColor:
+                text == "/" || text == "X" || text == "-" || text == "+"
+                ? const Color.fromARGB(255, 47, 223, 194)
+                : (text == "=")
+                ? const Color.fromARGB(255, 232, 48, 12)
+                : const Color.fromARGB(255, 156, 166, 164),
+            foregroundColor: Colors.white,
+            textStyle: TextStyle(fontSize: 30),
+            shape:RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.circular(20),
+            ),
+          ),
+        ),
       ),
     );
   }
 
   String evaluateexpression(String expression) {
     try {
-      expression = expression.replaceAll("x", "*").replaceAll("/", "/");
+      expression = expression.replaceAll("X", "*").replaceAll("/", "/");
       Parser p = Parser();
       Expression exp = p.parse(expression);
       ContextModel cm = ContextModel();
@@ -44,7 +60,7 @@ class _HomeState extends State<Home> {
       if (value == "AC") {
         input = "";
         output = "0";
-      } else if (value == "clear") {
+      } else if (value == "⌫") {
         input = input.isNotEmpty ? input.substring(0, input.length - 1) : "";
       } else if (value == "=") {
         try {
@@ -61,45 +77,101 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              alignment: Alignment.bottomRight,
-              padding: EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: .end,
-                crossAxisAlignment: .end,
-                children: [Text(input), Text(output)],
-              ),
-            ),
-          ),
-          Column(
+      backgroundColor: const Color.fromARGB(255, 15, 1, 1),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Center(
+          child: Column(
             children: [
-              Row(
+              Expanded(
+                child: Container(
+                  alignment: Alignment.bottomRight,
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisAlignment: .end,
+                    crossAxisAlignment: .end,
+                    children: [
+                      Text(input, style: TextStyle(color: Colors.white,fontSize: 30)),
+                      Text(
+                        output,
+                        style: TextStyle(color: Colors.white, fontSize: 70),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Column(
                 children: [
-                  button("AC"),
-                  button("%"),
-                  button("clear"),
-                  button("/"),
+                  Row(
+                    children: [
+                      button("AC"),
+                      SizedBox(width: 10),
+                      button("%"),
+                      SizedBox(width: 10),
+                      button("()"),
+                      SizedBox(width: 10),
+                      button("/"),
+                      SizedBox(width: 10),
+                    ],
+                  ),
+
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      button("7"),
+                      SizedBox(width: 10),
+                      button("8"),
+                      SizedBox(width: 10),
+                      button("9"),
+                      SizedBox(width: 10),
+                      button("X"),
+                      SizedBox(width: 10),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      button("4"),
+                      SizedBox(width: 10),
+                      button("5"),
+                      SizedBox(width: 10),
+                      button("6"),
+                      SizedBox(width: 10),
+                      button("-"),
+                      SizedBox(width: 10),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      button("1"),
+                      SizedBox(width: 10),
+                      button("2"),
+                      SizedBox(width: 10),
+                      button("3"),
+                      SizedBox(width: 10),
+                      button("+"),
+                      SizedBox(width: 10),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      button("0"),
+                      SizedBox(width: 10),
+                      button("⌫"),
+                      SizedBox(width: 10),
+                      button("."),
+                      SizedBox(width: 10),
+                      button("="),
+                      SizedBox(width: 10),
+                    ],
+                  ),
                 ],
-              ),
-              Row(
-                children: [button("7"), button("8"), button("9"), button("x")],
-              ),
-              Row(
-                children: [button("4"), button("5"), button("6"), button("-")],
-              ),
-              Row(
-                children: [button("1"), button("2"), button("3"), button("+")],
-              ),
-              Row(
-                children: [button("00"), button("0"), button("."), button("=")],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
